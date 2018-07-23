@@ -1,5 +1,5 @@
 ---
-title: 'CB2-101: R introduction'
+title: 'R introduction'
 author: "Malay (malay@uab.edu)"
 date: "Jul 23, 2018"
 output:

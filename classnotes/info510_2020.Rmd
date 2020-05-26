@@ -1,0 +1,151 @@
+---
+title: "INFO510_2020"
+author: "Malay"
+date: "5/26/2020"
+output: html_notebook
+---
+
+# 1st day
+
+## Vectors
+```{r}
+cat("Hello world")
+
+
+x = c(1,2,3,4, "hello")
+x <- c(1,2,3,4) 
+x <- c(1:100)
+x + 2
+
+x[1]
+x[100]
+x
+class(x)
+
+y <- c("a","b","c",1)
+y
+class(y)
+```
+
+## Lists
+
+```{r}
+l <- list()
+l[[1]] <- 1
+l[[2]] <- "Hello"
+
+v <- vector()
+v[1] <- 1
+v[2] <- "Hello"
+
+class(l)
+class(v)
+
+str(l)
+
+```
+
+## Data frame
+
+```{r}
+data(iris)
+View(iris)
+str(iris)
+
+dim(iris)
+```
+
+
+### Subsetting data frame
+
+```{r}
+colnames(iris)
+row.names(iris)
+
+# Particular column
+iris$Species
+iris[ ,5 ]
+
+# Particular cell
+iris[1,2]
+
+# Particular row
+iris[10, ]
+
+l[[3]] <- iris
+str(l)
+
+l <- list()
+l[[1]] <- iris$Sepal.Length
+l[[2]] <- iris$Sepal.Width
+l[[3]] <- iris
+str(l)
+
+l[[1]][2]
+l[[2]][2]
+
+# getting the species column from the 3rd element of the list
+l[[3]][, 5]
+```
+
+## Factor
+
+```{r}
+unique(iris$Species)
+class(iris$Species)
+levels(iris$Species)
+
+myiris <- split(iris, iris$Species)
+
+
+```
+
+## Looping
+
+```{r}
+for (i in 1:length(myiris) ) {
+  df <- myiris[[i]]
+  print (mean( df$Sepal.Length))
+}
+mean()
+```
+
+### Apply family
+
+```{r}
+
+# lapply
+results <- lapply( myiris, function(x) {
+  mean(x$Sepal.Length)
+} )  
+
+results[[1]]
+results[["setosa"]]
+
+# apply
+apply_result <- apply(iris[ , c(1:4)], MARGIN = 2, mean)
+apply_result
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

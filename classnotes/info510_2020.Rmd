@@ -97,7 +97,8 @@ levels(iris$Species)
 
 myiris <- split(iris, iris$Species)
 
-
+x <- factor(c("yes", "yes", "no"), levels = c("yes","no"))
+x
 ```
 
 ## Looping
@@ -127,6 +128,130 @@ apply_result <- apply(iris[ , c(1:4)], MARGIN = 2, mean)
 apply_result
 ```
 
+## Logical data type
+
+```{r}
+v <- c(1:100)
+v <- v+2
+v [v>50 & v<90]
+v <- v [ v != 59]
+v
+
+# subsetting iris for only numeric columns
+str(iris)
+
+only_num <- vector()
+
+for (i in 1:dim(iris)[2])  {
+  v <- iris[, i]
+  only_num <- c(only_num, class(v) == "numeric")
+}
+only_num
+only_num_iris <- iris[, only_num]
+View(only_num_iris)
+apply(only_num_iris, MARGIN = 2, mean)
+
+#----------------
+
+
+```
+
+## Converting one type to another
+
+```{r}
+v <- c(1:2, "a")
+v <- c(1:2)
+class(v)
+vc <- as.character(v)
+class(vc)
+vc
+f <- iris$Species
+class(f)
+as.numeric(f)
+as.character(f)
+iris[iris$Species == "setosa", ]
+```
+
+## Sorting
+
+```{r}
+o <- order(iris$Petal.Length)
+ordered_vector <- iris$Petal.Length[o] 
+ordered_vector
+
+# Ordering data frame
+ordered_iris <- iris[o, ]
+View(ordered_iris)
+```
+
+## Matrix
+
+```{r}
+m <- matrix(1:6, nrow=2, ncol=3)
+dim(m)
+m
+dim(m) <- c(3,2)
+m
+```
+
+## Traspose
+```{r}
+trasposed_iris <- as.data.frame(t(iris))
+
+```
+
+## NA
+
+```{r}
+x <- c(1,2, NA, 10, 3)
+mean(x)
+!is.na(x)
+x <- x[!is.na(x)]
+x
+```
+
+## Read and write data in R
+
+```{r}
+View(iris)
+
+write.table(iris, file="myiris.txt", row.names = F, 
+            quote = F, col.names = T, sep="\t")
+
+myiris <- read.table("myiris.txt", header = T)
+
+
+```
+
+# Plotting
+
+```{r}
+plot(iris)
+x <- iris$Sepal.Length
+y <- iris$Sepal.Width
+
+{
+png(file = "testplot.png")
+par(mfrow=c(1,2))
+plot(x,y, main = "Iris data", pch=16)
+  points(iris$Petal.Length,iris$Petal.Width, col="red", pch=16)
+legend("topleft", legend=c("Sepal","Petal"), pch=16, col=c("black","red") )
+
+
+plot(x,y, main = "Iris data", pch=16)
+  points(iris$Petal.Length,iris$Petal.Width, col="red", pch=16)
+legend("topleft", legend=c("Sepal","Petal"), pch=16, col=c("black","red") )
+dev.off()
+par(mfrow=c(1,1))
+}
+
+plot(x,y, main = "Iris data", pch=16, col=iris$Species)
+
+# ggplot
+library(ggplot2)
+p <- ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, colour = Species)) + geom_point()
+p
+```
 
 
 

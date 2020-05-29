@@ -2,7 +2,11 @@
 title: "INFO510_2020"
 author: "Malay"
 date: "5/26/2020"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  word_document: default
 ---
 
 # 1st day
@@ -231,7 +235,7 @@ x <- iris$Sepal.Length
 y <- iris$Sepal.Width
 
 {
-png(file = "testplot.png")
+#png(file = "testplot.png")
 par(mfrow=c(1,2))
 plot(x,y, main = "Iris data", pch=16)
   points(iris$Petal.Length,iris$Petal.Width, col="red", pch=16)
@@ -241,7 +245,7 @@ legend("topleft", legend=c("Sepal","Petal"), pch=16, col=c("black","red") )
 plot(x,y, main = "Iris data", pch=16)
   points(iris$Petal.Length,iris$Petal.Width, col="red", pch=16)
 legend("topleft", legend=c("Sepal","Petal"), pch=16, col=c("black","red") )
-dev.off()
+#dev.off()
 par(mfrow=c(1,1))
 }
 
@@ -249,18 +253,127 @@ plot(x,y, main = "Iris data", pch=16, col=iris$Species)
 
 # ggplot
 library(ggplot2)
-p <- ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, colour = Species)) + geom_point()
-p
+library(cowplot)
+library(patchwork)
+p <- ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, colour = Species)) + geom_point() + theme_set(theme_cowplot())
+print(p)
+
+# Multiplot in ggplot
+p1 <- ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, colour = Species)) + geom_point() + theme_set(theme_cowplot()) +ggtitle("Plot 1\ntitle")
+p2 <- ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, colour = Species)) + geom_point() + theme_set(theme_cowplot()) 
+
+combined_plot <- plot_grid(p1, p2, nrow=1) # cowplot
+combined_plot
+
+p1 <- p1 + theme_dark()
+
+
+patched_p <- p1 + p2 # patchwork
+patched_p
+
+x <- 2
+x
+print(x)
+```
+
+
+## Histogram
+
+```{r}
+# Base graphics
+head(iris$Petal.Length)
+hist( iris$Petal.Length, breaks = 50)
+plot( density(iris$Petal.Length))
+
+{plot (density (rnorm(500)))
+abline(v=1)
+abline(v=-1)
+}
+rn <- rnorm(500)
+mean(rn)
+sd(rn)
+
+## ggplot
+g <- ggplot(iris, aes(x=Petal.Width))
+g <- g + geom_histogram(bins = 50)
+g
+```
+
+
+## Boxplot
+
+```{r}
+data("airquality")
+View(airquality)
+
+boxplot(airquality)
+
+n <- rnorm(101)
+n <- n[order(n)]
+median(n)
+n
+quantile(n, 0.25)
+quantile(n, 0.75)
+
+summary(airquality)
+table(iris$Species)
+
+##ggplot
+
+p <- ggplot(airquality, aes(x=) )
+
+```
+
+# Satistics
+
+## Correlation
+```{r}
+plot (airquality$Solar.R, airquality$Temp)
+s <- cor.test(airquality$Solar.R, airquality$Temp, method = )
+s$p.value
+s$estimate
+
+```
+
+# Regression
+
+```{r}
+{plot(airquality$Solar.R, airquality$Temp)
+m <- lm(airquality$Temp ~ airquality$Solar.R)
+summary(m)
+abline(m)}
+```
+
+# Kable
+
+```{r}
+knitr::kable(airquality)
 ```
 
 
 
+# Regular expression
 
+1. "\n" -newline
+2. "\t" -tab
+3. "\d" - number
+4. "\S" - Nonspace
+5. "\s" - space
+6. "+" - One or more
+7. "*" - None or more
+8. "." - Any character
+9. "^" - beginning
+10 "$" - end
 
+## Regular expression in R
 
+```{r}
+iris$Species
+iris$Species == "setosa"
+iris$Species[ grep("^v", iris$Species)]
+grepl("^v", iris$Species)
 
-
-
+```
 
 
 

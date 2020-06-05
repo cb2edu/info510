@@ -376,12 +376,99 @@ grepl("^v", iris$Species)
 ```
 
 
+## RNASeq
+
+```{r}
+r_d <- read.table("info510/2020/rnaseq_data/ad-br_express_table.txt")
+dim(r_d)
+
+# Upper quartile normalization
+names(r_d) <- c("a","b")
+not_zero <- r_d$a[ r_d$a !=0 ]
+u_q <- quantile(not_zero, 0.75)
+r_d$a <- r_d$a/u_q
+
+
+```
+
+### RNASeq analysis
+
+```{r}
+download.file("https://github.com/cb2edu/info510/raw/2020/04-RNASeq/data/pnas_expression.txt","info510/2020/rnaseq_data/pnas_expression.txt")
+
+pnas <- read.table("info510/2020/rnaseq_data/pnas_expression.txt", header = T)
+```
 
 
 
+### EdgeR
+
+```{r}
+row.names(pnas) <- pnas$ensembl_ID
+pnas <- pnas[, -c(1,9)]
+colnames(pnas) <- c("S1","S2","S3","S4","S5","S6","S7")
+groups <- c("C","C","C","C","T","T","T")
 
 
+library(edgeR)
+cds <- DGEList(pnas, group = groups)
+cds <- calcNormFactors(cds)
+cds$samples$norm.factors
 
+design <- model.matrix(~groups)
+y <- estimateDisp(cds, design)
+fit <- glmQLFit(y, design)
+qlf <- glmQLFTest(fit, coef = 2)
+top_genes <- topTags(qlf,n = nrow(pnas))
+View(top_genes$table)
+```
+
+## DeSeq
+
+```{r}
+pnas <- pnas[rowSums(pnas) !=0, ]
+library(DESeq2)
+coldata <- data.frame(condition=groups)
+rownames(coldata) <- colnames(pnas)
+
+dds <- DESeqDataSetFromMatrix(countData = pnas,
+                              colData = coldata,
+                              design = ~condition)
+
+dds <- estimateSizeFactors(dds)
+sizeFactors(dds)
+counts(dds, normalized=T)
+dds <- DESeq(dds)
+results <- results(dds)
+#results<-data.frame(results$log2FoldChange, results$padj)
+
+# Volcano plot
+plot(results$log2FoldChange, -log10(results$padj))
+```
+
+
+## Principal component analysis
+
+```{r}
+pnas
+d <- pnas +1
+log.d <- log2(d)
+d.pca <- prcomp( t(log.d))
+pca.summary <- summary(d.pca)
+pca.summary$x
+d.pca$sdev^2
+plot(pca.summary$x[,1], pca.summary$x[,2],col=coldata$condition)
+```
+
+## Regular expression
+
+```{r}
+text <- "gi|123456|ref|ABCDEFG"
+pattern <- "gi\\|(\\d+)\\|ref\\|(\\S+)"
+m <- regexec(pattern, text = text, perl=T)
+s <- regmatches(text, m)
+s
+```
 
 
 

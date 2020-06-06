@@ -13,9 +13,13 @@ Unless otherwise mentioned, submit your answer as single `Rmd` file with runnabl
 
 
 # Problem 1
-Swissvar is a database of human gene, their variations, and disease associations. The file can be downloaded from here: <ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/variants/humsavar.txt>. The first column of this file contains the gene name and the rest of the columns contains the other information. Using this file (A) list out the top five genes that are mutated in various human disease. (B) plot the frequency distribution of disease variants in human genome across all the genes in the file (C) calculate the average number disease causing mutations across all genes in human genome and mark this number on the previous plot as veritcal red line.   
+Swissvar is a database of human gene, their variations, and disease associations. The file can be downloaded from here: <ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/variants/humsavar.txt>. The first column of this file contains the gene name and the rest of the columns contains the other information. Using this file (A) list out the top five genes that are mutated in various human disease. (B) plot the frequency distribution of disease variants in human genome across all the genes in the file (C) calculate the average number disease causing mutations across all genes in human genome and mark this number on the previous plot as veritcal red line. 
 
 **Hint:** Remember to skip the information lines in the file and also note that `type of variant` column contains both disease causing and non-disease causing variants.
+
+**Note:** Try to parse this file yourself. If you cannot do it, run the script [`create_data_file.R`](https://raw.githubusercontent.com/cb2edu/info510/2020/05-final_problem/create_data_file.R) to create the data file `humsavar.tsv` in your current directory. Read this file using the starndard R way.
+
+
 
 # Problem 2
 (A) Write two R scripts one for upper quantile normalization and other for DSEQ normalization of a count table file. Assume the first col to be gene name. The pograms should accept the count table name (use R `commandArgs()` function to read the file name) and should generate the normalized output file.  
